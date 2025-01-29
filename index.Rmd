@@ -1,7 +1,7 @@
 ---
-title: "My document"
+title: "UAS DATABASE"
 date: "`r Sys.Date()`"
-author: Deden Istiawan-Institut Teknologi Statistika dan Bisnis Muhammadiyah
+author: Rakha Nugraha Rekayasa Perangkat Lunak (A3202300025)
 output:
   rmdformats::robobook:
     self_contained: true
@@ -26,6 +26,70 @@ knitr::opts_chunk$set(echo = TRUE)
 data <- read.csv("data uas.csv", header = TRUE)
 
 ```
+
+
+```{r}
+df <- data.frame(
+  geo = c("IDN", "USA", "FRA", "CHN", "BRA"),
+  Negara = c("Indonesia", "Amerika Serikat", "Perancis", "China", "Brazil"),
+  Benua = c("Asia", "Amerika", "Eropa", "Asia", "Amerika Selatan"),
+  Tahun = c(2020, 2020, 2020, 2020, 2020),
+  Angka_Harapan_Hidup = c(71.5, 78.8, 82.5, 76.3, 74.0),
+  Pendapatan_per_kapita = c(4000, 65000, 45000, 10000, 9500),
+  Populasi = c(273000000, 331000000, 67000000, 1400000000, 212000000),
+  Jumlah_anak = c(2.3, 1.8, 1.9, 1.6, 2.2)
+)
+```
+
+
+```{r}
+library(ggplot2)
+
+histogram_plot <- ggplot(df, aes(x = Angka_Harapan_Hidup)) +
+  geom_histogram(binwidth = 2, fill = "skyblue", color = "black") +
+  ggtitle("Distribusi Angka Harapan Hidup") +
+  xlab("Angka Harapan Hidup") +
+  ylab("Frekuensi")
+print(histogram_plot)
+```
+
+
+```{r}
+
+bar_chart <- ggplot(df, aes(x = Negara, y = Pendapatan_per_kapita, fill = Benua)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Pendapatan per Kapita per Negara") +
+  xlab("Negara") +
+  ylab("Pendapatan per Kapita")
+print(bar_chart)
+```
+```{r}
+library(plotly)
+library(dplyr)
+
+
+scatter_3d <- df %>%
+  plot_ly(
+    x = ~Pendapatan_per_kapita,
+    y = ~Angka_Harapan_Hidup,
+    z = ~Populasi,
+    type = "scatter3d",
+    mode = "markers",
+    marker = list(size = 5, color = ~Jumlah_anak, colorscale = "Viridis")
+  ) %>%
+  layout(title = "3D Scatter Plot: Pendapatan, Harapan Hidup, dan Populasi")
+
+scatter_3d
+
+```
+```{r}
+interactive_plot <- ggplot(df, aes(x = Pendapatan_per_kapita, y = Angka_Harapan_Hidup, text = paste("Negara:", Negara))) +
+  geom_point(aes(color = Benua, size = Populasi)) +
+  ggtitle("Grafik Interaktif: Pendapatan per Kapita vs Angka Harapan Hidup")
+ggplotly(interactive_plot)
+```
+
+
 
 # R Markdown
 
